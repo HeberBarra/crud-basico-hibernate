@@ -25,4 +25,21 @@ public class GerenciarEstudante {
 
         return hqlList.getResultList();
     }
+
+    public Estudante findById(long id) {
+        return entityManager.find(Estudante.class, id);
+    }
+
+    public void update(Estudante estudante) {
+        entityManager.getTransaction().begin();
+        entityManager.merge(estudante);
+        entityManager.getTransaction().commit();
+    }
+
+    public void delete(Estudante estudante) {
+        entityManager.getTransaction().begin();
+        entityManager.remove(estudante);
+        entityManager.getTransaction().commit();
+    }
+
 }

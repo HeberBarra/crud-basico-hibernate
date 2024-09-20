@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.awt.EventQueue;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 import org.crud.basico.estudante.Estudante;
@@ -14,7 +15,10 @@ public class Main implements Callable<Void> {
     public static final String NOME_ARQUIVO_PERSISTENCE = "crud";
     public static final int ADICIONAR_ESTUDANTE = 1;
     public static final int LISTAR_ESTUDANTES = 2;
-    public static final int SAIR = 3;
+    public static final int PESQUISAR_POR_ID = 3;
+    public static final int ATUALIZAR_ESTUDANTE = 4;
+    public static final int EXCLUIR_ESTUDANTE = 5;
+    public static final int SAIR = 6;
     private final EntityManagerFactory entityManagerFactory;
     private final EntityManager entityManager;
     private final GerenciarEstudante gerenciarEstudante;
@@ -34,11 +38,20 @@ public class Main implements Callable<Void> {
     private void execute() {
         while (true) {
             mostrarMenu();
+            System.out.print("Escolha uma opção: \n> ");
             int escolha = scanner.nextInt();
             scanner.nextLine();
 
             switch (escolha) {
                 case ADICIONAR_ESTUDANTE -> adicionarEstudante();
+
+                case LISTAR_ESTUDANTES -> listarEstudantes();
+
+                case PESQUISAR_POR_ID -> pesquisarPorId();
+
+                case ATUALIZAR_ESTUDANTE -> atualizarEstudante();
+
+                case EXCLUIR_ESTUDANTE -> excluirEstudante();
 
                 case SAIR -> {
                     return;
@@ -46,6 +59,8 @@ public class Main implements Callable<Void> {
 
                 default -> System.out.println("Opção inválida, por favor tente novamente...");
             }
+
+            System.out.println();
         }
     }
 
@@ -59,13 +74,87 @@ public class Main implements Callable<Void> {
         Estudante estudante = new Estudante();
         estudante.setNome(nome);
         estudante.setEmail(email);
-
         gerenciarEstudante.create(estudante);
+
+        System.out.println("Estudante cadastrado com sucesso.");
+    }
+
+    private void listarEstudantes() {
+        List<Estudante> estudantes = gerenciarEstudante.list();
+
+        if (estudantes.isEmpty()) {
+            System.out.println("Não há estudantes cadastrados.");
+            return;
+        }
+
+        for (Estudante estudante: estudantes) {
+            System.out.printf("ID: %d%n", estudante.getId());
+            System.out.printf("Nome: %s%n", estudante.getNome());
+            System.out.printf("E-Mail: %s%n", estudante.getEmail());
+        }
+    }
+
+    private void pesquisarPorId() {
+        System.out.print("Digite o ID do estudante a ser pesquisado: \n> ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
+
+        Estudante estudante = gerenciarEstudante.findById(id);
+        if (estudante == null) {
+            System.out.println("O estudante solicitado não foi encontrado.");
+            return;
+        }
+
+        System.out.printf("ID: %d%n", estudante.getId());
+        System.out.printf("Nome: %s%n", estudante.getNome());
+        System.out.printf("E-Mail: %s%n", estudante.getEmail());
+    }
+
+    private void atualizarEstudante() {
+        System.out.print("Digite o ID do estudante a ser atualizado: \n> ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
+
+        Estudante estudante = gerenciarEstudante.findById(id);
+        if (estudante == null) {
+            System.out.println("O estudante solicitado não foi encontrado.");
+            return;
+        }
+
+        System.out.print("Digite o novo nome do estudante: \n> ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Digite o novo email do estudante: \n> ");
+        String email = scanner.nextLine();
+
+        estudante.setNome(nome);
+        estudante.setEmail(email);
+
+        gerenciarEstudante.update(estudante);
+        System.out.println("Estudante atualizado com sucesso.");
+    }
+
+    private void excluirEstudante() {
+        System.out.print("Digite o ID do estudante a ser excluído: \n> ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
+
+        Estudante estudante = gerenciarEstudante.findById(id);
+        if (estudante == null) {
+            System.out.println("O estudante solicitado não foi encontrado.");
+            return;
+        }
+
+        gerenciarEstudante.delete(estudante);
+        System.out.println("Estudante excluído com sucesso.");
     }
 
     private void mostrarMenu() {
         System.out.printf("[ %d ] Adicionar estudante%n", ADICIONAR_ESTUDANTE);
         System.out.printf("[ %d ] Listar estudantes%n", LISTAR_ESTUDANTES);
+        System.out.printf("[ %d ] Pesquisar por ID%n", PESQUISAR_POR_ID);
+        System.out.printf("[ %d ] Atualizar estudante%n", ATUALIZAR_ESTUDANTE);
+        System.out.printf("[ %d ] Excluir estudante%n", EXCLUIR_ESTUDANTE);
         System.out.printf("[ %d ] Sair%n", SAIR);
     }
 
