@@ -1,4 +1,4 @@
-package org.template;
+package org.crud.basico;
 
 public class Main {
 

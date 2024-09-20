@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.template</groupId>
-  <artifactId>template-projeto-maven</artifactId>
+  <groupId>org.crud.basico</groupId>
+  <artifactId>crud-basico-hibernate</artifactId>
   <version>0.0.1</version>
 
   <properties>
@@ -43,7 +43,7 @@
               <archive>
                 <manifest>
                   <mainClass>
-                    org.template.Main
+                    org.crud.basico.Main
                   </mainClass>
                 </manifest>
               </archive>

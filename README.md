@@ -1,4 +1,3 @@
-# Template Maven
+# Crud Básico Hibernate
 
-Template de projetos Java com Maven, com plugin para criação de fat jars e com o plugin spotless configurado.
-
+Projeto básico para treinar a criação de CRUDs usando a framework Hibernate.
