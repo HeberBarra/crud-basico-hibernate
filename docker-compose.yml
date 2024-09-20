@@ -1,0 +1,19 @@
+services:
+  mysql-server:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    container_name: crud-basico-hibernate
+    restart: always
+    environment:
+      - MYSQL_DATABASE=db_crud
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysql-volume:/var/lib/mysql"
+
+volumes:
+  mysql-volume:
+    driver: local
