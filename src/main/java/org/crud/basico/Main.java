@@ -16,9 +16,10 @@ public class Main implements Callable<Void> {
     public static final int ADICIONAR_ESTUDANTE = 1;
     public static final int LISTAR_ESTUDANTES = 2;
     public static final int PESQUISAR_POR_ID = 3;
-    public static final int ATUALIZAR_ESTUDANTE = 4;
-    public static final int EXCLUIR_ESTUDANTE = 5;
-    public static final int SAIR = 6;
+    public static final int PESQUISAR_POR_NOME = 4;
+    public static final int ATUALIZAR_ESTUDANTE = 5;
+    public static final int EXCLUIR_ESTUDANTE = 6;
+    public static final int SAIR = 7;
     private final EntityManagerFactory entityManagerFactory;
     private final EntityManager entityManager;
     private final GerenciarEstudante gerenciarEstudante;
@@ -48,6 +49,8 @@ public class Main implements Callable<Void> {
                 case LISTAR_ESTUDANTES -> listarEstudantes();
 
                 case PESQUISAR_POR_ID -> pesquisarPorId();
+
+                case PESQUISAR_POR_NOME -> pesquisarPorNome();
 
                 case ATUALIZAR_ESTUDANTE -> atualizarEstudante();
 
@@ -87,7 +90,7 @@ public class Main implements Callable<Void> {
             return;
         }
 
-        for (Estudante estudante: estudantes) {
+        for (Estudante estudante : estudantes) {
             System.out.printf("ID: %d%n", estudante.getId());
             System.out.printf("Nome: %s%n", estudante.getNome());
             System.out.printf("E-Mail: %s%n", estudante.getEmail());
@@ -108,6 +111,24 @@ public class Main implements Callable<Void> {
         System.out.printf("ID: %d%n", estudante.getId());
         System.out.printf("Nome: %s%n", estudante.getNome());
         System.out.printf("E-Mail: %s%n", estudante.getEmail());
+    }
+
+    private void pesquisarPorNome() {
+        System.out.print("Digite o nome a ser pesquisado: \n> ");
+        String nome = scanner.nextLine();
+
+        List<Estudante> estudantes = gerenciarEstudante.searchByName(nome);
+
+        if (estudantes.isEmpty()) {
+            System.out.println("Não foi encontrado nenhum estudante com esse nome.");
+            return;
+        }
+
+        for (Estudante estudante : estudantes) {
+            System.out.printf("ID: %d%n", estudante.getId());
+            System.out.printf("Nome: %s%n", estudante.getNome());
+            System.out.printf("E-Mail: %s%n", estudante.getEmail());
+        }
     }
 
     private void atualizarEstudante() {
@@ -153,6 +174,7 @@ public class Main implements Callable<Void> {
         System.out.printf("[ %d ] Adicionar estudante%n", ADICIONAR_ESTUDANTE);
         System.out.printf("[ %d ] Listar estudantes%n", LISTAR_ESTUDANTES);
         System.out.printf("[ %d ] Pesquisar por ID%n", PESQUISAR_POR_ID);
+        System.out.printf("[ %d ] Pesquisar por nome%n", PESQUISAR_POR_NOME);
         System.out.printf("[ %d ] Atualizar estudante%n", ATUALIZAR_ESTUDANTE);
         System.out.printf("[ %d ] Excluir estudante%n", EXCLUIR_ESTUDANTE);
         System.out.printf("[ %d ] Sair%n", SAIR);

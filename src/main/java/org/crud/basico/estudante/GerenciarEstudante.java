@@ -30,6 +30,14 @@ public class GerenciarEstudante {
         return entityManager.find(Estudante.class, id);
     }
 
+    @SuppressWarnings("unchecked")
+    public List<Estudante> searchByName(String nome) {
+        String sqlOOSearch = "from Estudante e where e.nome like :nome";
+        Query hqlSearch = entityManager.createQuery(sqlOOSearch).setParameter("nome", "%" + nome + "%");
+
+        return hqlSearch.getResultList();
+    }
+
     public void update(Estudante estudante) {
         entityManager.getTransaction().begin();
         entityManager.merge(estudante);
@@ -41,5 +49,4 @@ public class GerenciarEstudante {
         entityManager.remove(estudante);
         entityManager.getTransaction().commit();
     }
-
 }
